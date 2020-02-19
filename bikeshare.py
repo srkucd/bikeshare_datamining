@@ -47,7 +47,8 @@ def get_filters():
     #Get user input for month (all, january, february, ... , june)
 
     while True:
-        month_input = input("Insert the number of the month you are interested.[Jan(1)-Jun(6)], for unfiltered data, please input 'all'.")
+        month_input = input("Insert the number of the month you are interested.[Jan(1)-Jun(6)], for unfiltered data, "
+                            "please input 'all'.")
         if month_input in str(list(month_dict.keys())):
             month = month_dict.get(int(month_input))
             print('Okay, got it. you choose ' + month.title() + '.\n')
@@ -62,7 +63,8 @@ def get_filters():
     #Get user input for day of week (all, monday, tuesday, ... sunday)
 
     while True:
-        day_input = input("Insert the weekday number you are interested.[Mon-Sun:1-7],for unfiltered data, please input 'all'.")
+        day_input = input("Insert the weekday number you are interested.[Mon-Sun:1-7],for unfiltered data, please "
+                          "input 'all'.")
         if day_input in str(list(weekday_dict.keys())):
             day = weekday_dict.get(int(day_input))
             print('Okay, got it. you choose ' + day.title() + '.\n')
@@ -125,7 +127,7 @@ def time_stats(df):
     else:
         print('The most common month is: ' + str(top_month.index[0]) + '. ' + 'Count: ' + str(top_month[0]))
 
-    # TO DO: display the most common day of week
+    #Display the most common day of week
     if df['day_of_week'].nunique() == 1:
         print('You use weekday as filter, hence, most common day display function is not available.\n')
     else:
@@ -158,6 +160,9 @@ def station_stats(df):
     top_combination = df['Combination'].value_counts().head(1)
     print('The most frequent combination between start station and end station is: ' + str(top_combination.index[0])
           + '. Count: ' + str(top_combination[0]))
+
+    #This column is no longer useful.
+    del df['Combination']
 
     print("This took %s seconds." % (time.time() - start_time))
     print('-'*40)
@@ -215,6 +220,35 @@ def user_stats(df):
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
 
+
+def raw_data(df):
+    raw_order = input("Do you need to scan the raw data? (y)es/(n)o")
+    if raw_order == 'y':
+        num = 5
+        print(df.head(num))
+        while num < len(df.index):
+            five_more = input("Do you want to scan five more rows? (y)es/(n)o")
+            try:
+                if five_more == 'y':
+                    num += 5
+                    more = df.head(num)
+                    print(more.tail(5))
+                    continue
+                elif five_more == 'n':
+                    print('Thank you. ' + str(num) + ' rows of dataset casted.')
+                    break
+                else:
+                    print('Invalid value, please try again.')
+                    continue
+            except:
+                print(df.tail())
+                print("You arrived to the bottom of the dataset.")
+    elif raw_order == 'n':
+        print('Thank you. no raw data will be casted.')
+    else:
+        print("Invalid value, please try again.")
+
+
 def main():
     while True:
         city, month, day = get_filters()
@@ -224,6 +258,7 @@ def main():
         station_stats(df)
         trip_duration_stats(df)
         user_stats(df)
+        raw_data(df)
 
         restart = input('\nWould you like to restart? Enter yes or no.\n')
         if restart.lower() != 'yes':
