@@ -1,0 +1,2 @@
+/Users/ishirunkang/Downloads/bikeshare-2/chicago.csv filter=lfs diff=lfs merge=lfs -text
+*.csv filter=lfs diff=lfs merge=lfs -text
